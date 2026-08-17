@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Jarvis (Voice)
+Exec=/home/ayaanahamedf/MyProjects/Jarvis/ada_local-main/launch-voice.sh
+Icon=/home/ayaanahamedf/MyProjects/Jarvis/ada_local-main/icon.png
+Terminal=false
+Categories=Utility;Chat;
