@@ -1,452 +1,176 @@
-# 🤖 A.D.A - Pocket AI
+# 🤖 Jarvis — My Personal AI Assistant
 
-> Fedora note: install audio build dependencies before installing Python packages:
-> `sudo dnf install portaudio-devel python3-devel libsndfile-devel`. On Wayland,
-> window focus/list/close controls are intentionally reported as unsupported;
-> use an X11 session with `wmctrl` for those tools.
+Jarvis is a local-first AI assistant built for Fedora Linux. It runs a fast, private local model when you're offline and switches to Gemini Flash when you're connected, with a voice interface, smart home control, and OS-level tool access — launched straight from your desktop, no terminal required.
 
-<p align="center">
-  <img src="gui/assets/logo.png" alt="A.D.A Logo" width="120" height="120">
-</p>
-
-**A.D.A** (Advanced Digital Assistant) is a **fully local, privacy-focused AI assistant** for Windows. It combines a beautiful modern GUI with powerful voice control capabilities—all running entirely on YOUR computer with no cloud dependency.
-
-> 🔒 **Your data stays on your machine.** No API keys required for core functionality. No subscriptions. No data collection.
+> 🔒 Runs primarily on your machine. Cloud (Gemini) is used only when online and only for reasoning — voice stays local either way.
 
 ---
 
 ## ✨ Key Features
 
 | Feature | Description |
-|---------|-------------|
-| 🎤 **Voice Control** | Wake word detection ("Jarvis") with natural language commands |
-| 💬 **AI Chat** | Interactive chat with local LLMs via Ollama with streaming responses |
-| 🏠 **Smart Home** | Control TP-Link Kasa smart lights and plugs from the app |
-| 📅 **Planner** | Manage calendar events, alarms, and timers |
-| 📰 **Daily Briefing** | AI-curated news from Technology, Science, and Top Stories |
-| 🌤️ **Weather** | Current weather and hourly forecast on your dashboard |
-| 🔍 **Web Search** | Search the web through voice or chat commands |
-| 🖥️ **System Monitor** | Real-time CPU and memory usage in the title bar |
-
----
-
-## 📸 Screenshots
-
-*The application features a sleek Windows 11 Fluent Design aesthetic with dark mode support.*
+|---|---|
+| 🎤 **Voice Control** | Push-to-talk by default, or launch straight into listening with `--listen` |
+| 🧠 **Hybrid Brain** | Gemini Flash when online, local Ollama model when offline — switches automatically |
+| 🛠️ **OS Control** | Shell command execution and window management, gated behind confirmation prompts for anything destructive |
+| 💬 **AI Chat** | Streaming responses in a clean PySide6 GUI |
+| 🏠 **Smart Home** | Control TP-Link Kasa smart lights and plugs |
+| 📅 **Planner** | Calendar events, alarms, and timers |
+| 📰 **Daily Briefing** | AI-curated news |
+| 🌤️ **Weather** | Current conditions and forecast on the dashboard |
+| 🖥️ **System Monitor** | Real-time CPU/memory usage |
+| 🖱️ **Desktop Launchers** | Click-to-open app icon, plus a separate voice-trigger icon — no terminal needed |
 
 ---
 
 ## 📋 Prerequisites
 
-Before you begin, make sure you have:
+### Fedora system packages
 
-### Required Software
+```
+sudo dnf install portaudio-devel python3-devel libsndfile-devel
+```
 
-| Software | Purpose | Download |
-|----------|---------|----------|
-| **Miniconda** | Python environment manager | [miniconda.io](https://docs.anaconda.com/miniconda/) |
-| **Ollama** | Local AI model server | [ollama.com](https://ollama.com/download) |
-| **NVIDIA GPU** (Recommended) | Faster AI inference | GPU with 4GB+ VRAM |
+### Required software
 
-### Hardware Recommendations
+| Software | Purpose |
+|---|---|
+| Python 3.11 | Runtime |
+| [Ollama](https://ollama.com/download) | Local model server (offline fallback) |
+| Gemini API key | Cloud reasoning when online — free tier at [aistudio.google.com](https://aistudio.google.com) |
 
-- **Minimum**: 8GB RAM, any modern CPU
-- **Recommended**: 16GB RAM, NVIDIA GPU with 6GB+ VRAM
-- **Storage**: ~5GB for models and voice data
+### Hardware
+
+- **Minimum**: 8GB RAM
+- **Recommended**: 16GB RAM, NVIDIA GPU with 6GB+ VRAM (speeds up the offline Ollama path)
+- **Storage**: ~5GB for local models
+
+> **Wayland note**: window focus/list/close controls are intentionally reported as unsupported on Wayland. Use an X11 session with `wmctrl` for those tools.
 
 ---
 
-## 🚀 Quick Start Guide
-
-Follow these steps to get A.D.A running on your system.
-
-### Step 1: Install Miniconda
-
-1. Download from [miniconda.io](https://docs.anaconda.com/miniconda/)
-2. Run the installer (use default options)
-3. Open your terminal
-
-### Step 2: Install Ollama
-
-1. Download and install from [ollama.com/download](https://ollama.com/download)
-2. Run the installer (Ollama will start automatically as a background service)
-
-> ✅ **Ollama runs in the background** - no need to start it manually after installation.
-
-### Step 3: Download an AI Model
-
-Open a terminal and pull your preferred model. You can choose from:
-
-**🔹 Option A: Qwen3 (Recommended for most users)**
-```bash
-# Fast and efficient - great balance of speed and quality
-ollama pull qwen3:1.7b
-```
-
-**🔹 Option B: DeepSeek R1 (Better reasoning)**
-```bash
-# Stronger reasoning capabilities - slightly slower
-ollama pull deepseek-r1:1.5b
-```
-
-> 💡 **Tip**: You can switch models anytime in `config.py` by changing `RESPONDER_MODEL`.
-
-Verify your model is installed:
-```bash
-ollama list
-```
-
-### Step 4: Clone & Set Up the Project
+## 🚀 Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/pocket_ai.git
-cd pocket_ai
+# Clone your repo
+git clone https://github.com/ayaan523/Jarvis_v1.git
+cd Jarvis_v1
 
-# Create a conda environment
-conda create -n ada python=3.11 -y
-
-# Activate the environment
-conda activate ada
+# Virtual environment
+python3.11 -m venv venv
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 ```
 
-> ⏱️ **Note**: First installation may take 5-10 minutes as PyTorch and other large packages are downloaded.
-
-### Step 5: GPU Setup (NVIDIA Users)
-
-For **significantly faster** AI inference, install PyTorch with CUDA support:
+Pull a local model for the offline fallback:
 
 ```bash
-# Install PyTorch with CUDA 12.4 support
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+ollama pull qwen3:1.7b
 ```
 
-Verify CUDA is working:
-```bash
-python -c "import torch; print(f'CUDA available: {torch.cuda.is_available()}')"
+Create a `.env` file with your Gemini key:
+
+```
+GEMINI_API_KEY=your_key_here
 ```
 
-> 💡 **CPU-only users**: Skip this step—PyTorch will use CPU by default. It's slower but works fine.
-
-### Step 6: Run the Application
+Run it:
 
 ```bash
 python main.py
 ```
 
-🎉 **That's it!** A.D.A will launch with a beautiful GUI.
-
----
-
-## 🎮 GPU Acceleration
-
-A.D.A benefits greatly from GPU acceleration. Here's what runs on your GPU:
-
-| Component | GPU Benefit | Without GPU |
-|-----------|-------------|-------------|
-| **Router Model** | ~50ms inference | ~200ms inference |
-| **Ollama LLM** | Fast streaming responses | Slower, but functional |
-| **Whisper STT** | Real-time transcription | Slight delay |
-
-### CUDA Requirements
-
-- **NVIDIA GPU** with CUDA Compute Capability 5.0+ (GTX 900 series or newer)
-- **CUDA Toolkit**: Bundled with PyTorch—no separate install needed
-- **VRAM**: 4GB minimum, 6GB+ recommended
-
-### Check Your GPU
+Or jump straight into a listening session:
 
 ```bash
-# View GPU info and VRAM
-nvidia-smi
+python main.py --listen
 ```
 
 ---
 
-## 🤖 Automatic Model Downloads
+## 🖱️ Desktop Launchers (no terminal needed)
 
-The following models are **downloaded automatically** on first run—no manual setup required:
-
-| Model | Purpose | Size | Downloaded From |
-|-------|---------|------|-----------------|
-| **Router Model** | Intent classification | ~500MB | [Hugging Face](https://huggingface.co/nlouis/pocket-ai-router) |
-| **TTS Voice** | Text-to-speech | ~50MB | [Piper Voices](https://huggingface.co/rhasspy/piper-voices) |
-| **STT Model** | Speech-to-text (Whisper) | ~150MB | OpenAI Whisper |
-
-> 📦 **First launch will take a few minutes** while these models download. Subsequent launches are instant.
-
----
-
-## 🎙️ Voice Assistant Setup
-
-A.D.A includes Alexa-like voice control with wake word detection.
-
-### How It Works
-
-1. Say **"Jarvis"** to wake the assistant
-2. Speak your command naturally
-3. A.D.A processes your request and responds
-
-### Example Voice Commands
-
-| Command | What It Does |
-|---------|--------------|
-| *"Jarvis, turn on the office lights"* | Controls smart lights |
-| *"Jarvis, set a timer for 10 minutes"* | Creates a countdown timer |
-| *"Jarvis, what's on my schedule today?"* | Reads your calendar |
-| *"Jarvis, search the web for Python tutorials"* | Performs web search |
-| *"Jarvis, add buy groceries to my to-do list"* | Creates a task |
-
-### Voice Configuration
-
-Edit `config.py` to customize:
-
-```python
-# Change wake word (default: "jarvis")
-WAKE_WORD = "jarvis"
-
-# Adjust sensitivity (0.0-1.0, lower = less false positives)
-WAKE_WORD_SENSITIVITY = 0.4
-
-# Enable/disable voice assistant
-VOICE_ASSISTANT_ENABLED = True
-```
-
-Voice defaults to push-to-talk. Launch `python main.py --listen` to start a
-listening session immediately; it uses the lightweight `tiny` Whisper model.
+1. Copy the launcher files:
+   ```bash
+   cp desktop/*.desktop ~/.local/share/applications/
+   ```
+2. Edit the `Exec=` and `Icon=` paths inside those files to match your actual home directory.
+3. Register them:
+   ```bash
+   update-desktop-database ~/.local/share/applications/
+   ```
+4. Press `Super`, search "Jarvis" — you'll see both **Jarvis** (normal launch) and **Jarvis (Voice)** (starts listening immediately). Right-click either to pin to Favorites.
 
 ---
 
-## ⚙️ Configuration
+## 🧠 How the Hybrid Backend Works
 
-All configuration is centralized in `config.py`:
-
-### AI Models
-
-Change the chat model in `config.py`:
-
-```python
-# The main chat model (runs on Ollama)
-# Options: "qwen3:1.7b" (fast) or "deepseek-r1:1.5b" (better reasoning)
-RESPONDER_MODEL = "qwen3:1.7b"
-
-# Ollama server URL (usually no need to change)
-OLLAMA_URL = "http://localhost:11434/api"
+```
+Online + Gemini reachable  →  Gemini Flash handles reasoning
+Offline or Gemini fails    →  Falls back to local Ollama model
 ```
 
-**Model Comparison:**
-
-| Model | Speed | Reasoning | Best For |
-|-------|-------|-----------|----------|
-| `qwen3:1.7b` | ⚡ Fast | Good | Daily use, quick responses |
-| `deepseek-r1:1.5b` | Moderate | Excellent | Math, coding, complex questions |
-
-### Text-to-Speech
-
-```python
-# Voice model (downloads automatically on first run)
-TTS_VOICE_MODEL = "en_GB-northern_english_male-medium"
-```
-
-### Weather Location
-
-The default location is New York City. To change it:
-
-1. Open the app
-2. Go to **Settings** tab
-3. Enter your latitude and longitude
+Connectivity is checked with a short-timeout reachability check (not just "is wifi on"), cached briefly so it's not re-checked on every message. If a request starts on Gemini and the connection drops mid-session, it retries on Ollama automatically rather than failing outright.
 
 ---
 
-## 🏗️ Project Architecture
+## ⚡ Lightweight by Default
 
-```
-pocket_ai/
-├── main.py                 # Application entry point
-├── config.py               # Centralized configuration
-├── requirements.txt        # Python dependencies
-│
-├── core/                   # Backend logic
-│   ├── router.py           # FunctionGemma intent classifier
-│   ├── function_executor.py # Executes routed functions
-│   ├── voice_assistant.py  # Voice pipeline orchestrator
-│   ├── stt.py              # Speech-to-text with wake word
-│   ├── tts.py              # Piper text-to-speech
-│   ├── kasa_control.py     # Smart home device control
-│   ├── weather.py          # Open-Meteo weather API
-│   ├── news.py             # DuckDuckGo news + AI curation
-│   ├── tasks.py            # To-do list management
-│   ├── calendar_manager.py # Local calendar/events
-│   ├── history.py          # SQLite chat history
-│   └── llm.py              # Ollama LLM interface
-│
-├── gui/                    # PySide6 GUI
-│   ├── app.py              # Main window setup
-│   ├── handlers.py         # Chat message handling
-│   ├── tabs/               # Individual tab screens
-│   │   ├── dashboard.py    # Weather + status overview
-│   │   ├── chat.py         # AI chat interface
-│   │   ├── planner.py      # Calendar + tasks
-│   │   ├── briefing.py     # AI news curation
-│   │   ├── home_automation.py  # Smart device control
-│   │   └── settings.py     # App configuration
-│   └── components/         # Reusable UI widgets
-│
-├── merged_model/           # Fine-tuned FunctionGemma router
-└── demo.py                 # Standalone voice assistant demo
-```
-
-### How It Works
-
-```
-┌─────────────┐     ┌──────────────────┐     ┌─────────────┐
-│  User Input │────▶│ FunctionGemma   │────▶│  Function   │
-│  (Voice/Text)  │     │   Router         │     │  Executor   │
-└─────────────┘     └──────────────────┘     └──────┬──────┘
-                                                    │
-       ┌────────────────────────────────────────────┼────────────────┐
-       │                                            │                │
-       ▼                                            ▼                ▼
-┌──────────────┐                          ┌──────────────┐   ┌──────────────┐
-│  Kasa Lights │                          │   Calendar   │   │  Web Search  │
-└──────────────┘                          └──────────────┘   └──────────────┘
-                                                    │
-                                                    ▼
-                                          ┌──────────────┐
-                                          │ Qwen LLM     │
-                                          │ (via Ollama) │
-                                          └──────────────┘
-                                                    │
-                                                    ▼
-                                          ┌──────────────┐
-                                          │ Piper TTS    │
-                                          │ (Voice Out)  │
-                                          └──────────────┘
-```
-
-1. **User speaks or types** a command
-2. **FunctionGemma Router** (fine-tuned local AI) classifies intent
-3. **Function Executor** runs the appropriate action
-4. **Qwen LLM** generates a natural language response
-5. **Piper TTS** speaks the response (if voice enabled)
+- Push-to-talk instead of always-on wake word — no idle background listening
+- `tiny` Whisper model for speech-to-text — small and fast
+- Local intent router is skipped when Gemini is active online (Gemini handles routing itself); only used for the offline Ollama path
+- Ollama only starts on-demand for the offline fallback, not as a permanent background service
+- An optional `ULTRA_LIGHT_MODE` flag in `config.py` trims further (cloud audio, tray-only UI) at the cost of some response latency — off by default
 
 ---
 
-## 🏠 Smart Home Integration
+## 🛠️ OS Control & Safety
 
-A.D.A supports **TP-Link Kasa** smart devices:
+Shell command execution is available as a tool but is:
+- Off by default (`SHELL_TOOL_ENABLED = False` in `config.py`)
+- Checked against a denylist of destructive patterns before running anything
+- Never run with auto-elevated privileges — sudo always prompts interactively
+- Logged to `logs/shell_commands.log` with timestamp and stated reason
 
-### Supported Devices
+---
 
-- ✅ Smart bulbs (on/off, brightness, color)
-- ✅ Smart plugs (on/off)
-- ✅ Smart light strips
-
-### Setup
-
-1. Ensure your Kasa devices are on the same network as your computer
-2. Open A.D.A and go to the **Home Automation** tab
-3. Click **Refresh** to scan for devices
-4. Control devices through the GUI or voice commands
-
-### Voice Commands
+## 🏗️ Project Structure
 
 ```
-"Turn on the living room lights"
-"Set the bedroom lights to 50%"
-"Turn off all lights"
-"Change the office light to blue"
+Jarvis_v1/
+├── main.py                    # Entry point (supports --listen)
+├── config.py                  # All configuration, including backend + safety flags
+├── desktop/                   # .desktop launcher files
+├── core/
+│   ├── backends.py            # Gemini/Ollama backend abstraction
+│   ├── hybrid_client.py       # Online/offline selection + failover
+│   ├── gemini_client.py       # Gemini Flash integration
+│   ├── gemini_live_audio.py   # Optional cloud audio (ultra-light mode)
+│   ├── function_executor.py   # Tool execution, including shell/window control
+│   ├── router.py              # Local intent classifier (offline path)
+│   ├── stt.py / tts.py        # Local voice I/O
+│   ├── kasa_control.py        # Smart home
+│   ├── weather.py / news.py / tasks.py / calendar_manager.py
+│   └── history.py             # Persistent chat history
+├── gui/                       # PySide6 interface
+└── tests/
+    └── test_shell_tool.py     # Verifies the safety denylist
 ```
 
 ---
 
 ## 🔧 Troubleshooting
 
-### Common Issues
+**Ollama connection refused** — run `ollama serve`, confirm the model's pulled with `ollama list`, check `OLLAMA_URL` in `config.py`.
 
-<details>
-<summary><strong>❌ Ollama connection refused</strong></summary>
+**Gemini errors / rate limits** — free tier has request limits; the app should fail over to Ollama automatically, but if you're offline entirely and Ollama isn't running, start it manually.
 
-**Problem**: The app can't connect to Ollama.
+**Voice not working** — check mic permissions, confirm `realtimestt` is installed, try `python main.py --listen`.
 
-**Solution**:
-1. Make sure Ollama is running: `ollama serve`
-2. Check if the model is downloaded: `ollama list`
-3. Verify the URL in `config.py` matches your setup
-
-</details>
-
-<details>
-<summary><strong>❌ CUDA/GPU not detected</strong></summary>
-
-**Problem**: PyTorch is running on CPU instead of GPU.
-
-**Solution**:
-1. Install CUDA-compatible PyTorch:
-   ```bash
-   pip install torch --index-url https://download.pytorch.org/whl/cu121
-   ```
-2. Verify CUDA: `python -c "import torch; print(torch.cuda.is_available())"`
-
-</details>
-
-<details>
-<summary><strong>❌ Voice assistant not working</strong></summary>
-
-**Problem**: Wake word isn't being detected.
-
-**Solution**:
-1. Check your microphone permissions
-2. Ensure `realtimestt` is installed: `pip install realtimestt`
-3. Try lowering `WAKE_WORD_SENSITIVITY` in `config.py`
-
-</details>
-
-<details>
-<summary><strong>❌ Smart devices not found</strong></summary>
-
-**Problem**: Kasa devices don't appear in the app.
-
-**Solution**:
-1. Ensure devices are on the same WiFi network
-2. Try the Kasa app first to verify devices work
-3. Check firewall isn't blocking device discovery (UDP port 9999)
-
-</details>
+**Wayland window controls not working** — expected; switch to X11 for those specific tools.
 
 ---
 
-## 🤝 Contributing
-
-Contributions are welcome! Here's how to get started:
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Run tests: `pytest tests/`
-5. Submit a pull request
-
----
-
-## 📜 License
-
-This project is open source. See [LICENSE](LICENSE) for details.
-
----
-
-## 🙏 Acknowledgments
-
-- [Ollama](https://ollama.com/) - Local LLM inference
-- [QFluentWidgets](https://github.com/zhiyiYo/PyQt-Fluent-Widgets) - Beautiful UI components
-- [Piper TTS](https://github.com/rhasspy/piper) - Lightweight text-to-speech
-- [python-kasa](https://github.com/python-kasa/python-kasa) - Kasa device control
-- [RealTimeSTT](https://github.com/KoljaB/RealtimeSTT) - Speech recognition
-
----
-
-<p align="center">
-  Made with ❤️ for local AI enthusiasts
-</p>
+Made for local, private, genuinely useful AI on my own machine.
