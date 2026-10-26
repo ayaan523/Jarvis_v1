@@ -1,5 +1,7 @@
 # 🤖 Jarvis — My Personal AI Assistant
 
+![Jarvis AI assistant banner (1920 × 1080)](assets/jarvis-banner.svg)
+
 Jarvis is a local-first AI assistant built for Fedora Linux. It runs a fast, private local model when you're offline and switches to Gemini Flash when you're connected, with a voice interface, smart home control, and OS-level tool access — launched straight from your desktop, no terminal required.
 
 > 🔒 Runs primarily on your machine. Cloud (Gemini) is used only when online and only for reasoning — voice stays local either way.

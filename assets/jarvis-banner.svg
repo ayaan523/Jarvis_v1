@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" fill="none">
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1920" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#120204"/>
+      <stop offset=".52" stop-color="#260509"/>
+      <stop offset="1" stop-color="#100306"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="matrix(0 515 -515 0 1470 510)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFD700" stop-opacity=".15"/>
+      <stop offset="1" stop-color="#FFD700" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="gold" x1="188" y1="440" x2="871" y2="674" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF2AA"/>
+      <stop offset=".46" stop-color="#FFD700"/>
+      <stop offset="1" stop-color="#C98426"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="1172" y1="262" x2="1681" y2="809" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3A1112" stop-opacity=".92"/>
+      <stop offset="1" stop-color="#17070A" stop-opacity=".86"/>
+    </linearGradient>
+    <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" stroke="#FFD700" stroke-opacity=".065" stroke-width="1"/>
+    </pattern>
+    <filter id="soft-glow" x="1100" y="140" width="750" height="800" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="38"/>
+    </filter>
+  </defs>
+
+  <path fill="url(#background)" d="M0 0h1920v1080H0z"/>
+  <path fill="url(#grid)" d="M0 0h1920v1080H0z"/>
+  <path fill="url(#glow)" d="M0 0h1920v1080H0z"/>
+  <circle cx="1490" cy="520" r="255" fill="#D99D22" fill-opacity=".18" filter="url(#soft-glow)"/>
+
+  <g stroke="#FFD700" stroke-opacity=".17">
+    <path d="M0 154h510M0 166h344M1418 0v176M1432 0v104"/>
+    <path d="M0 912h460M0 928h286M1744 922h176M1744 938h106"/>
+    <circle cx="1460" cy="526" r="332"/>
+    <circle cx="1460" cy="526" r="354" stroke-dasharray="3 12"/>
+  </g>
+
+  <g fill="#FFD700">
+    <circle cx="1460" cy="194" r="3"/>
+    <circle cx="1792" cy="526" r="3"/>
+    <circle cx="1128" cy="526" r="3"/>
+    <circle cx="1460" cy="858" r="3"/>
+  </g>
+
+  <g transform="translate(1110 176)">
+    <circle cx="350" cy="350" r="269" stroke="#FFD700" stroke-opacity=".24" stroke-width="2"/>
+    <circle cx="350" cy="350" r="235" stroke="#FFD700" stroke-opacity=".48" stroke-width="2" stroke-dasharray="2 11"/>
+    <circle cx="350" cy="350" r="197" stroke="#FFD700" stroke-opacity=".2" stroke-width="1"/>
+    <path d="M350 107a243 243 0 0 1 210 121" stroke="url(#gold)" stroke-width="4" stroke-linecap="round"/>
+    <path d="M560 472a243 243 0 0 1-185 117" stroke="#E5A82D" stroke-opacity=".72" stroke-width="4" stroke-linecap="round"/>
+    <circle cx="350" cy="350" r="156" fill="#FFD700" fill-opacity=".055" stroke="#FFD700" stroke-opacity=".8" stroke-width="2"/>
+    <circle cx="350" cy="350" r="125" fill="#160609" stroke="#D4AF37" stroke-opacity=".55"/>
+    <circle cx="350" cy="350" r="87" fill="#FFD700" fill-opacity=".07"/>
+    <path d="M350 262v176M262 350h176M288 288l124 124m0-124L288 412" stroke="#FFD700" stroke-opacity=".26" stroke-width="1"/>
+    <path d="M350 292c-32 0-58 26-58 58 0 20 10 37 26 48v21h64v-21c16-11 26-28 26-48 0-32-26-58-58-58Zm-23 152h46m-38 15h30" stroke="url(#gold)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="350" cy="350" r="5" fill="#FFF2AA"/>
+  </g>
+
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="164" y="303" fill="#FFD700" font-size="22" font-weight="700" letter-spacing="7">PERSONAL AI • DESKTOP ASSISTANT</text>
+    <path d="M164 336h76" stroke="url(#gold)" stroke-width="4" stroke-linecap="round"/>
+    <text x="154" y="540" fill="url(#gold)" font-size="164" font-weight="700" letter-spacing="12">JARVIS</text>
+    <text x="168" y="608" fill="#FFF8E7" font-size="31" letter-spacing="4">INTELLIGENCE, AT YOUR COMMAND</text>
+    <text x="168" y="678" fill="#E5C158" font-size="24">Voice · Local AI · Smart Home · Daily Planning</text>
+    <text x="168" y="739" fill="#E5C158" fill-opacity=".72" font-size="19" letter-spacing="2">BUILT FOR YOUR DESKTOP. DESIGNED AROUND YOU.</text>
+
+    <g transform="translate(1328 796)">
+      <rect width="286" height="49" rx="24.5" fill="#FFD700" fill-opacity=".08" stroke="#FFD700" stroke-opacity=".4"/>
+      <circle cx="26" cy="24.5" r="5" fill="#FFD700"/>
+      <text x="44" y="31" fill="#FFF2AA" font-size="16" letter-spacing="2">READY WHEN YOU ARE</text>
+    </g>
+  </g>
+
+  <g stroke="#FFD700" stroke-opacity=".46" stroke-width="2">
+    <path d="M164 802h490l18-18h73"/>
+    <path d="M1594 274h106l18 18h78"/>
+    <path d="M1657 746h85l18-18h42"/>
+  </g>
+  <g fill="#FFD700">
+    <circle cx="164" cy="802" r="4"/>
+    <circle cx="1796" cy="292" r="4"/>
+    <circle cx="1802" cy="728" r="4"/>
+  </g>
+
+  <path d="M0 1062h1920" stroke="#FFD700" stroke-opacity=".4"/>
+  <path d="M0 0h1920v1080H0z" stroke="#FFD700" stroke-opacity=".12" stroke-width="2"/>
+</svg>
